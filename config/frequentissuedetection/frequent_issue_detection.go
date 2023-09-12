@@ -1,4 +1,4 @@
-package frequent_issue_detection
+package frequentissuedetection
 
 import "github.com/upbound/upjet/pkg/config"
 
