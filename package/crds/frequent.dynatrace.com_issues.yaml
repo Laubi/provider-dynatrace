@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.11.3
   creationTimestamp: null
-  name: resources.null.dynatrace.upbound.io
+  name: issues.frequent.dynatrace.com
 spec:
-  group: null.dynatrace.upbound.io
+  group: frequent.dynatrace.com
   names:
     categories:
     - crossplane
     - managed
     - dynatrace
-    kind: Resource
-    listKind: ResourceList
-    plural: resources
-    singular: resource
+    kind: Issues
+    listKind: IssuesList
+    plural: issues
+    singular: issues
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Resource is the Schema for the Resources API. <no value>
+        description: Issues is the Schema for the Issuess API. <no value>
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ResourceSpec defines the desired state of Resource
+            description: IssuesSpec defines the desired state of Issues
             properties:
               deletionPolicy:
                 default: Delete
@@ -67,13 +67,18 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  triggers:
-                    additionalProperties:
-                      type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
-                    type: object
+                  detectApps:
+                    description: Detect frequent issues within applications, enabled
+                      (`true`) or disabled (`false`)
+                    type: boolean
+                  detectInfra:
+                    description: Detect frequent issues within infrastructure, enabled
+                      (`true`) or disabled (`false`)
+                    type: boolean
+                  detectTxn:
+                    description: Detect frequent issues within transactions and services,
+                      enabled (`true`) or disabled (`false`)
+                    type: boolean
                 type: object
               managementPolicy:
                 default: FullControl
@@ -261,20 +266,32 @@ spec:
             required:
             - forProvider
             type: object
+            x-kubernetes-validations:
+            - message: detectApps is a required parameter
+              rule: self.managementPolicy == 'ObserveOnly' || has(self.forProvider.detectApps)
+            - message: detectInfra is a required parameter
+              rule: self.managementPolicy == 'ObserveOnly' || has(self.forProvider.detectInfra)
+            - message: detectTxn is a required parameter
+              rule: self.managementPolicy == 'ObserveOnly' || has(self.forProvider.detectTxn)
           status:
-            description: ResourceStatus defines the observed state of Resource.
+            description: IssuesStatus defines the observed state of Issues.
             properties:
               atProvider:
                 properties:
+                  detectApps:
+                    description: Detect frequent issues within applications, enabled
+                      (`true`) or disabled (`false`)
+                    type: boolean
+                  detectInfra:
+                    description: Detect frequent issues within infrastructure, enabled
+                      (`true`) or disabled (`false`)
+                    type: boolean
+                  detectTxn:
+                    description: Detect frequent issues within transactions and services,
+                      enabled (`true`) or disabled (`false`)
+                    type: boolean
                   id:
                     type: string
-                  triggers:
-                    additionalProperties:
-                      type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
-                    type: object
                 type: object
               conditions:
                 description: Conditions of the resource.
