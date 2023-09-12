@@ -10,7 +10,7 @@ import (
 
 	ujconfig "github.com/upbound/upjet/pkg/config"
 
-	"github.com/Laubi/provider-dynatrace/config/frequent_issue_detection"
+	"github.com/Laubi/provider-dynatrace/config/frequentissuedetection"
 )
 
 const (
@@ -36,7 +36,7 @@ func GetProvider() *ujconfig.Provider {
 
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
-		frequent_issue_detection.Configure,
+		frequentissuedetection.Configure,
 	} {
 		configure(pc)
 	}
