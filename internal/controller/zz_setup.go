@@ -9,7 +9,7 @@ import (
 
 	"github.com/upbound/upjet/pkg/controller"
 
-	resource "github.com/Laubi/provider-dynatrace/internal/controller/null/resource"
+	issues "github.com/Laubi/provider-dynatrace/internal/controller/frequent/issues"
 	providerconfig "github.com/Laubi/provider-dynatrace/internal/controller/providerconfig"
 )
 
@@ -17,7 +17,7 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		resource.Setup,
+		issues.Setup,
 		providerconfig.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {

@@ -5,9 +5,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.11.3
   creationTimestamp: null
-  name: providerconfigs.dynatrace.upbound.io
+  name: providerconfigs.dynatrace.dynatrace.com
 spec:
-  group: dynatrace.upbound.io
+  group: dynatrace.dynatrace.com
   names:
     categories:
     - crossplane
