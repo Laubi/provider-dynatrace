@@ -13,7 +13,7 @@ import (
 
 // Package type metadata.
 const (
-	Group   = "template.upbound.io"
+	Group   = "dynatrace.dynatrace.com"
 	Version = "v1beta1"
 )
 
