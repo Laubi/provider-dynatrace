@@ -13,7 +13,7 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type FrequentIssueDetectionObservation struct {
+type FrequentIssueObservation struct {
 
 	// Detect frequent issues within applications, enabled (`true`) or disabled (`false`)
 	DetectApps *bool `json:"detectApps,omitempty" tf:"detect_apps,omitempty"`
@@ -27,7 +27,7 @@ type FrequentIssueDetectionObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 }
 
-type FrequentIssueDetectionParameters struct {
+type FrequentIssueParameters struct {
 
 	// Detect frequent issues within applications, enabled (`true`) or disabled (`false`)
 	// +kubebuilder:validation:Optional
@@ -42,54 +42,54 @@ type FrequentIssueDetectionParameters struct {
 	DetectTxn *bool `json:"detectTxn,omitempty" tf:"detect_txn,omitempty"`
 }
 
-// FrequentIssueDetectionSpec defines the desired state of FrequentIssueDetection
-type FrequentIssueDetectionSpec struct {
+// FrequentIssueSpec defines the desired state of FrequentIssue
+type FrequentIssueSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     FrequentIssueDetectionParameters `json:"forProvider"`
+	ForProvider     FrequentIssueParameters `json:"forProvider"`
 }
 
-// FrequentIssueDetectionStatus defines the observed state of FrequentIssueDetection.
-type FrequentIssueDetectionStatus struct {
+// FrequentIssueStatus defines the observed state of FrequentIssue.
+type FrequentIssueStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        FrequentIssueDetectionObservation `json:"atProvider,omitempty"`
+	AtProvider        FrequentIssueObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// FrequentIssueDetection is the Schema for the FrequentIssueDetections API. <no value>
+// FrequentIssue is the Schema for the FrequentIssues API. <no value>
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,dynatrace}
-type FrequentIssueDetection struct {
+type FrequentIssue struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="self.managementPolicy == 'ObserveOnly' || has(self.forProvider.detectApps)",message="detectApps is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="self.managementPolicy == 'ObserveOnly' || has(self.forProvider.detectInfra)",message="detectInfra is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="self.managementPolicy == 'ObserveOnly' || has(self.forProvider.detectTxn)",message="detectTxn is a required parameter"
-	Spec   FrequentIssueDetectionSpec   `json:"spec"`
-	Status FrequentIssueDetectionStatus `json:"status,omitempty"`
+	Spec   FrequentIssueSpec   `json:"spec"`
+	Status FrequentIssueStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// FrequentIssueDetectionList contains a list of FrequentIssueDetections
-type FrequentIssueDetectionList struct {
+// FrequentIssueList contains a list of FrequentIssues
+type FrequentIssueList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []FrequentIssueDetection `json:"items"`
+	Items           []FrequentIssue `json:"items"`
 }
 
 // Repository type metadata.
 var (
-	FrequentIssueDetection_Kind             = "FrequentIssueDetection"
-	FrequentIssueDetection_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: FrequentIssueDetection_Kind}.String()
-	FrequentIssueDetection_KindAPIVersion   = FrequentIssueDetection_Kind + "." + CRDGroupVersion.String()
-	FrequentIssueDetection_GroupVersionKind = CRDGroupVersion.WithKind(FrequentIssueDetection_Kind)
+	FrequentIssue_Kind             = "FrequentIssue"
+	FrequentIssue_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: FrequentIssue_Kind}.String()
+	FrequentIssue_KindAPIVersion   = FrequentIssue_Kind + "." + CRDGroupVersion.String()
+	FrequentIssue_GroupVersionKind = CRDGroupVersion.WithKind(FrequentIssue_Kind)
 )
 
 func init() {
-	SchemeBuilder.Register(&FrequentIssueDetection{}, &FrequentIssueDetectionList{})
+	SchemeBuilder.Register(&FrequentIssue{}, &FrequentIssueList{})
 }

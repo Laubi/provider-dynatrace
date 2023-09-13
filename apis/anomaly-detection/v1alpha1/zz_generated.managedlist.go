@@ -7,8 +7,8 @@ package v1alpha1
 
 import resource "github.com/crossplane/crossplane-runtime/pkg/resource"
 
-// GetItems of this FrequentIssueDetectionList.
-func (l *FrequentIssueDetectionList) GetItems() []resource.Managed {
+// GetItems of this FrequentIssueList.
+func (l *FrequentIssueList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]

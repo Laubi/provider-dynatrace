@@ -9,7 +9,7 @@ import (
 
 	"github.com/upbound/upjet/pkg/controller"
 
-	frequentissuedetection "github.com/Laubi/provider-dynatrace/internal/controller/frequent-issue-detection/frequentissuedetection"
+	frequentissue "github.com/Laubi/provider-dynatrace/internal/controller/anomaly-detection/frequentissue"
 	providerconfig "github.com/Laubi/provider-dynatrace/internal/controller/providerconfig"
 )
 
@@ -17,7 +17,7 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		frequentissuedetection.Setup,
+		frequentissue.Setup,
 		providerconfig.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
