@@ -1,5 +1,5 @@
-apiVersion: frequent.dynatrace.com/v1alpha1
-kind: Issues
+apiVersion: frequent-issue-detection.dynatrace.com/v1alpha1
+kind: FrequentIssueDetection
 metadata:
   name: hello-crossplane
 spec:

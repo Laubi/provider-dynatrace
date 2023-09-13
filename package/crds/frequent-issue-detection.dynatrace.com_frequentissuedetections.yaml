@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.11.3
   creationTimestamp: null
-  name: issues.frequent.dynatrace.com
+  name: frequentissuedetections.frequent-issue-detection.dynatrace.com
 spec:
-  group: frequent.dynatrace.com
+  group: frequent-issue-detection.dynatrace.com
   names:
     categories:
     - crossplane
     - managed
     - dynatrace
-    kind: Issues
-    listKind: IssuesList
-    plural: issues
-    singular: issues
+    kind: FrequentIssueDetection
+    listKind: FrequentIssueDetectionList
+    plural: frequentissuedetections
+    singular: frequentissuedetection
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Issues is the Schema for the Issuess API. <no value>
+        description: FrequentIssueDetection is the Schema for the FrequentIssueDetections
+          API. <no value>
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +51,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: IssuesSpec defines the desired state of Issues
+            description: FrequentIssueDetectionSpec defines the desired state of FrequentIssueDetection
             properties:
               deletionPolicy:
                 default: Delete
@@ -274,7 +275,8 @@ spec:
             - message: detectTxn is a required parameter
               rule: self.managementPolicy == 'ObserveOnly' || has(self.forProvider.detectTxn)
           status:
-            description: IssuesStatus defines the observed state of Issues.
+            description: FrequentIssueDetectionStatus defines the observed state of
+              FrequentIssueDetection.
             properties:
               atProvider:
                 properties:
