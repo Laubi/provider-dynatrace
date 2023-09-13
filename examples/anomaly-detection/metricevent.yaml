@@ -1,0 +1,65 @@
+apiVersion: anomaly-detection.dynatrace.com/v1alpha1
+kind: MetricEvent
+metadata:
+  name: hello-crossplane2
+spec:
+  forProvider:
+    enabled: true
+    eventEntityDimensionKey: dt.entity.host
+    summary: This is my Crossplane created config
+    eventTemplate:
+    - description: "some description"
+      davisMerge: false
+      eventType: "CUSTOM_ALERT"
+      title: "sample_name"
+
+    modelProperties:
+    - type: "STATIC_THRESHOLD"
+      alertCondition: "ABOVE"
+      alertOnNoData: false
+      dealertingSamples: 5
+      samples: 5
+      threshold: 1
+      violatingSamples: 3
+
+    queryDefinition:
+    - type: "METRIC_KEY"
+      aggregation: "AVG"
+      metricKey: "builtin:host.disk.usedPct"
+
+      dimensionFilter:
+      - filter:
+        - dimensionKey: "dt.entity.host"
+          dimensionValue: "HOST-9DDF1200A29EFAC9"
+        - dimensionKey: "dt.entity.disk.name"
+          dimensionValue: "/local"
+        - dimensionKey: "dt.entity.disk"
+          dimensionValue: "DISK-3DC3FC42FBB07595"
+#      - filter: YOU MUST NOT DEFINE ANOTHER FILTER OBJECT
+#          - dimensionKey:
+#            dimensionValue:
+
+      entityFilter:
+      - dimensionKey: "dt.entity.host"
+        conditions:
+        - condition:
+          - type: "NAME"
+            operator: "EQUALS"
+            value: "HOST-80FF882B3215BF1A"
+          - type: "ENTITY_ID"
+            operator: "EQUALS"
+            value: "HOST-32D0DB4904B28FB3"
+          - type: "MANAGEMENT_ZONE"
+            operator: "EQUALS"
+            value: "-189204438944455158"
+          - type: "HOST_GROUP_NAME"
+            operator: "EQUALS"
+            value: "HOST-42FDD00356069724"
+#      - conditions: YOU MUST NOT CONFIGURE ANOTHER CONDITIONS OBJECT
+#          - condition:
+#              - operator:
+#                type:
+#                value:
+
+  providerConfigRef:
+    name: default
