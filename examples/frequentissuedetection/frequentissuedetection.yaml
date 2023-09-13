@@ -1,0 +1,11 @@
+apiVersion: frequent.dynatrace.com/v1alpha1
+kind: Issues
+metadata:
+  name: hello-crossplane
+spec:
+  forProvider:
+    detectApps: true
+    detectInfra: true
+    detectTxn: true
+  providerConfigRef:
+    name: default
