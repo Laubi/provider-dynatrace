@@ -5,9 +5,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.11.3
   creationTimestamp: null
-  name: frequentissues.anomaly-detection.dynatrace.com
+  name: frequentissues.anomalydetection.dynatrace.com
 spec:
-  group: anomaly-detection.dynatrace.com
+  group: anomalydetection.dynatrace.com
   names:
     categories:
     - crossplane

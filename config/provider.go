@@ -7,6 +7,7 @@ package config
 import (
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
+	"github.com/Laubi/provider-dynatrace/config/alerting"
 
 	ujconfig "github.com/upbound/upjet/pkg/config"
 
@@ -37,6 +38,7 @@ func GetProvider() *ujconfig.Provider {
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
 		anomaly_detection.Configure,
+		alerting.Configure,
 	} {
 		configure(pc)
 	}

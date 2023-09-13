@@ -18,7 +18,7 @@ import (
 	"github.com/upbound/upjet/pkg/terraform"
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	v1alpha1 "github.com/Laubi/provider-dynatrace/apis/anomaly-detection/v1alpha1"
+	v1alpha1 "github.com/Laubi/provider-dynatrace/apis/anomalydetection/v1alpha1"
 	features "github.com/Laubi/provider-dynatrace/internal/features"
 )
 

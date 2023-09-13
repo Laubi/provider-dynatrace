@@ -9,8 +9,9 @@ import (
 
 	"github.com/upbound/upjet/pkg/controller"
 
-	frequentissue "github.com/Laubi/provider-dynatrace/internal/controller/anomaly-detection/frequentissue"
-	metricevent "github.com/Laubi/provider-dynatrace/internal/controller/anomaly-detection/metricevent"
+	profile "github.com/Laubi/provider-dynatrace/internal/controller/alerting/profile"
+	frequentissue "github.com/Laubi/provider-dynatrace/internal/controller/anomalydetection/frequentissue"
+	metricevent "github.com/Laubi/provider-dynatrace/internal/controller/anomalydetection/metricevent"
 	providerconfig "github.com/Laubi/provider-dynatrace/internal/controller/providerconfig"
 )
 
@@ -18,6 +19,7 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
+		profile.Setup,
 		frequentissue.Setup,
 		metricevent.Setup,
 		providerconfig.Setup,

@@ -1,0 +1,800 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.11.3
+  creationTimestamp: null
+  name: profiles.alerting.dynatrace.com
+spec:
+  group: alerting.dynatrace.com
+  names:
+    categories:
+    - crossplane
+    - managed
+    - dynatrace
+    kind: Profile
+    listKind: ProfileList
+    plural: profiles
+    singular: profile
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Profile is the Schema for the Profiles API. <no value>
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ProfileSpec defines the desired state of Profile
+            properties:
+              deletionPolicy:
+                default: Delete
+                description: 'DeletionPolicy specifies what will happen to the underlying
+                  external when this managed resource is deleted - either "Delete"
+                  or "Orphan" the external resource. This field is planned to be deprecated
+                  in favor of the ManagementPolicy field in a future release. Currently,
+                  both could be set independently and non-default values would be
+                  honored if the feature flag is enabled. See the design doc for more
+                  information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223'
+                enum:
+                - Orphan
+                - Delete
+                type: string
+              forProvider:
+                properties:
+                  filters:
+                    description: The list of event filters.  For all filters that
+                      are *negated* inside of these event filters, that is all `Predefined`
+                      as well as `Custom` (Title and/or Description) ones the AND
+                      logic applies. For all *non-negated* ones the OR logic applies.
+                      Between these two groups, negated and non-negated, the AND logic
+                      applies.  If you specify both severity rule and event filter,
+                      the AND logic applies
+                    items:
+                      properties:
+                        filter:
+                          description: A conditions for the metric usage
+                          items:
+                            properties:
+                              custom:
+                                description: Configuration of a custom event filter.
+                                  Filters custom events by title or description. If
+                                  both specified, the AND logic applies
+                                items:
+                                  properties:
+                                    description:
+                                      description: Configuration of a matching filter
+                                      items:
+                                        properties:
+                                          caseSensitive:
+                                            description: The condition is case sensitive
+                                              (`false`) or case insensitive (`true`).   If
+                                              not set, then `false` is used, making
+                                              the condition case sensitive
+                                            type: boolean
+                                          enabled:
+                                            description: The filter is enabled (`true`)
+                                              or disabled (`false`)
+                                            type: boolean
+                                          negate:
+                                            description: Reverses the comparison **operator**.
+                                              For example it turns the **begins with**
+                                              into **does not begin with**
+                                            type: boolean
+                                          operator:
+                                            description: Operator of the comparison.   You
+                                              can reverse it by setting **negate**
+                                              to `true`. Possible values are `BEGINS_WITH`,
+                                              `CONTAINS`, `CONTAINS_REGEX`, `ENDS_WITH`
+                                              and `EQUALS`
+                                            type: string
+                                          value:
+                                            description: The value to compare to
+                                            type: string
+                                        required:
+                                        - operator
+                                        - value
+                                        type: object
+                                      type: array
+                                    metadata:
+                                      description: Configuration of a matching filter
+                                      items:
+                                        properties:
+                                          items:
+                                            description: Define filters for event
+                                              properties. A maximum of 20 properties
+                                              is allowed.
+                                            items:
+                                              properties:
+                                                filter:
+                                                  items:
+                                                    properties:
+                                                      key:
+                                                        description: GET /api/v2/eventProperties
+                                                          for list of available keys
+                                                        type: string
+                                                      value:
+                                                        description: Value
+                                                        type: string
+                                                    required:
+                                                    - key
+                                                    - value
+                                                    type: object
+                                                  type: array
+                                              required:
+                                              - filter
+                                              type: object
+                                            type: array
+                                        required:
+                                        - items
+                                        type: object
+                                      type: array
+                                    title:
+                                      description: Configuration of a matching filter
+                                      items:
+                                        properties:
+                                          caseSensitive:
+                                            description: The condition is case sensitive
+                                              (`false`) or case insensitive (`true`).   If
+                                              not set, then `false` is used, making
+                                              the condition case sensitive
+                                            type: boolean
+                                          enabled:
+                                            description: The filter is enabled (`true`)
+                                              or disabled (`false`)
+                                            type: boolean
+                                          negate:
+                                            description: Reverses the comparison **operator**.
+                                              For example it turns the **begins with**
+                                              into **does not begin with**
+                                            type: boolean
+                                          operator:
+                                            description: Operator of the comparison.   You
+                                              can reverse it by setting **negate**
+                                              to `true`. Possible values are `BEGINS_WITH`,
+                                              `CONTAINS`, `CONTAINS_REGEX`, `ENDS_WITH`
+                                              and `EQUALS`
+                                            type: string
+                                          value:
+                                            description: The value to compare to
+                                            type: string
+                                        required:
+                                        - operator
+                                        - value
+                                        type: object
+                                      type: array
+                                  type: object
+                                type: array
+                              predefined:
+                                description: Configuration of a custom event filter.
+                                  Filters custom events by title or description. If
+                                  both specified, the AND logic applies
+                                items:
+                                  properties:
+                                    negate:
+                                      description: 'The alert triggers when the problem
+                                        of specified severity arises while the specified
+                                        event **is** happening (`false`) or while
+                                        the specified event is **not** happening (`true`).   For
+                                        example, if you chose the Slowdown (`PERFORMANCE`)
+                                        severity and Unexpected high traffic (`APPLICATION_UNEXPECTED_HIGH_LOAD`)
+                                        event with **negate** set to `true`, the alerting
+                                        profile will trigger only when the slowdown
+                                        problem is raised while there is no unexpected
+                                        high traffic event.  Consider the following
+                                        use case as an example. The Slowdown (`PERFORMANCE`)
+                                        severity rule is set. Depending on the configuration
+                                        of the event filter (Unexpected high traffic
+                                        (`APPLICATION_UNEXPECTED_HIGH_LOAD`) event
+                                        is used as an example), the options of the
+                                        alerting profile is one of the following:*
+                                        **negate** is set to `false`: The alert triggers
+                                        when the slowdown problem is raised while
+                                        unexpected high traffic event is happening.  *
+                                        **negate** is set to `true`: The alert triggers
+                                        when the slowdown problem is raised while
+                                        there is no unexpected high traffic event.  *
+                                        no event rule is set: The alert triggers when
+                                        the slowdown problem is raised, regardless
+                                        of any events'
+                                      type: boolean
+                                    type:
+                                      description: The type of the predefined event.
+                                        Possible values are `APPLICATION_ERROR_RATE_INCREASED`,
+                                        `APPLICATION_SLOWDOWN`, `APPLICATION_UNEXPECTED_HIGH_LOAD`,
+                                        `APPLICATION_UNEXPECTED_LOW_LOAD`, `AWS_LAMBDA_HIGH_ERROR_RATE`,
+                                        `CUSTOM_APPLICATION_ERROR_RATE_INCREASED`,
+                                        `CUSTOM_APPLICATION_SLOWDOWN`, `CUSTOM_APPLICATION_UNEXPECTED_HIGH_LOAD`,
+                                        `CUSTOM_APPLICATION_UNEXPECTED_LOW_LOAD`,
+                                        `CUSTOM_APP_CRASH_RATE_INCREASED`, `DATABASE_CONNECTION_FAILURE`,
+                                        `DATA_CENTER_SERVICE_PERFORMANCE_DEGRADATION`,
+                                        `DATA_CENTER_SERVICE_UNAVAILABLE`, `EBS_VOLUME_HIGH_LATENCY`,
+                                        `EC2_HIGH_CPU`, `ELB_HIGH_BACKEND_ERROR_RATE`,
+                                        `ENTERPRICE_APPLICATION_PERFORMANCE_DEGRADATION`,
+                                        `ENTERPRISE_APPLICATION_UNAVAILABLE`, `ESXI_GUEST_ACTIVE_SWAP_WAIT`,
+                                        `ESXI_GUEST_CPU_LIMIT_REACHED`, `ESXI_HOST_CPU_SATURATION`,
+                                        `ESXI_HOST_DATASTORE_LOW_DISK_SPACE`, `ESXI_HOST_DISK_QUEUE_SLOW`,
+                                        `ESXI_HOST_DISK_SLOW`, `ESXI_HOST_MEMORY_SATURATION`,
+                                        `ESXI_HOST_NETWORK_PROBLEMS`, `ESXI_HOST_OVERLOADED_STORAGE`,
+                                        `ESXI_VM_IMPACT_HOST_CPU_SATURATION`, `ESXI_VM_IMPACT_HOST_MEMORY_SATURATION`,
+                                        `EXTERNAL_SYNTHETIC_TEST_OUTAGE`, `EXTERNAL_SYNTHETIC_TEST_SLOWDOWN`,
+                                        `HOST_OF_SERVICE_UNAVAILABLE`, `HTTP_CHECK_GLOBAL_OUTAGE`,
+                                        `HTTP_CHECK_LOCAL_OUTAGE`, `HTTP_CHECK_TEST_LOCATION_SLOWDOWN`,
+                                        `MOBILE_APPLICATION_ERROR_RATE_INCREASED`,
+                                        `MOBILE_APPLICATION_SLOWDOWN`, `MOBILE_APPLICATION_UNEXPECTED_HIGH_LOAD`,
+                                        `MOBILE_APPLICATION_UNEXPECTED_LOW_LOAD`,
+                                        `MOBILE_APP_CRASH_RATE_INCREASED`, `MONITORING_UNAVAILABLE`,
+                                        `OSI_DISK_LOW_INODES`, `OSI_GRACEFULLY_SHUTDOWN`,
+                                        `OSI_HIGH_CPU`, `OSI_HIGH_MEMORY`, `OSI_LOW_DISK_SPACE`,
+                                        `OSI_NIC_DROPPED_PACKETS_HIGH`, `OSI_NIC_ERRORS_HIGH`,
+                                        `OSI_NIC_UTILIZATION_HIGH`, `OSI_SLOW_DISK`,
+                                        `OSI_UNEXPECTEDLY_UNAVAILABLE`, `PGI_OF_SERVICE_UNAVAILABLE`,
+                                        `PGI_UNAVAILABLE`, `PG_LOW_INSTANCE_COUNT`,
+                                        `PROCESS_CRASHED`, `PROCESS_HIGH_GC_ACTIVITY`,
+                                        `PROCESS_MEMORY_RESOURCE_EXHAUSTED`, `PROCESS_NA_HIGH_CONN_FAIL_RATE`,
+                                        `PROCESS_NA_HIGH_LOSS_RATE`, `PROCESS_THREADS_RESOURCE_EXHAUSTED`,
+                                        `RDS_HIGH_CPU`, `RDS_HIGH_LATENCY`, `RDS_LOW_MEMORY`,
+                                        `RDS_LOW_STORAGE_SPACE`, `RDS_OF_SERVICE_UNAVAILABLE`,
+                                        `RDS_RESTART_SEQUENCE`, `SERVICE_ERROR_RATE_INCREASED`,
+                                        `SERVICE_SLOWDOWN`, `SERVICE_UNEXPECTED_HIGH_LOAD`,
+                                        `SERVICE_UNEXPECTED_LOW_LOAD`, `SYNTHETIC_GLOBAL_OUTAGE`,
+                                        `SYNTHETIC_LOCAL_OUTAGE`, `SYNTHETIC_NODE_OUTAGE`,
+                                        `SYNTHETIC_PRIVATE_LOCATION_OUTAGE` and `SYNTHETIC_TEST_LOCATION_SLOWDOWN`
+                                      type: string
+                                  required:
+                                  - type
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  legacyId:
+                    description: The ID of this setting when referred to by the Config
+                      REST API V1
+                    type: string
+                  managementZone:
+                    description: The ID of the management zone to which the alerting
+                      profile applies
+                    type: string
+                  rules:
+                    description: A list of rules for management zone usage.  Each
+                      rule is evaluated independently of all other rules
+                    items:
+                      properties:
+                        rule:
+                          description: A conditions for the metric usage
+                          items:
+                            properties:
+                              delayInMinutes:
+                                description: Send a notification if a problem remains
+                                  open longer than *X* minutes
+                                type: number
+                              includeMode:
+                                description: 'The filtering mode:  * `INCLUDE_ANY`:
+                                  The rule applies to monitored entities that have
+                                  at least one of the specified tags. You can specify
+                                  up to 100 tags.  * `INCLUDE_ALL`: The rule applies
+                                  to monitored entities that have **all** of the specified
+                                  tags. You can specify up to 10 tags.  * `NONE`:
+                                  The rule applies to all monitored entities'
+                                type: string
+                              severityLevel:
+                                description: "The severity level to trigger the alert.
+                                  Possible values are `AVAILABILITY`,\t`CUSTOM_ALERT`,\t`ERRORS`,`MONITORING_UNAVAILABLE`,`PERFORMANCE`
+                                  and `RESOURCE_CONTENTION`."
+                                type: string
+                              tags:
+                                description: A set of tags you want to filter by.
+                                  You can also specify a tag value alongside the tag
+                                  name using the syntax `name:value`.
+                                items:
+                                  type: string
+                                type: array
+                            required:
+                            - delayInMinutes
+                            - includeMode
+                            - severityLevel
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                type: object
+              managementPolicy:
+                default: FullControl
+                description: 'THIS IS AN ALPHA FIELD. Do not use it in production.
+                  It is not honored unless the relevant Crossplane feature flag is
+                  enabled, and may be changed or removed without notice. ManagementPolicy
+                  specifies the level of control Crossplane has over the managed external
+                  resource. This field is planned to replace the DeletionPolicy field
+                  in a future release. Currently, both could be set independently
+                  and non-default values would be honored if the feature flag is enabled.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223'
+                enum:
+                - FullControl
+                - ObserveOnly
+                - OrphanOnDelete
+                type: string
+              providerConfigRef:
+                default:
+                  name: default
+                description: ProviderConfigReference specifies how the provider that
+                  will be used to create, observe, update, and delete this managed
+                  resource should be configured.
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                  policy:
+                    description: Policies for referencing.
+                    properties:
+                      resolution:
+                        default: Required
+                        description: Resolution specifies whether resolution of this
+                          reference is required. The default is 'Required', which
+                          means the reconcile will fail if the reference cannot be
+                          resolved. 'Optional' means this reference will be a no-op
+                          if it cannot be resolved.
+                        enum:
+                        - Required
+                        - Optional
+                        type: string
+                      resolve:
+                        description: Resolve specifies when this reference should
+                          be resolved. The default is 'IfNotPresent', which will attempt
+                          to resolve the reference only when the corresponding field
+                          is not present. Use 'Always' to resolve the reference on
+                          every reconcile.
+                        enum:
+                        - Always
+                        - IfNotPresent
+                        type: string
+                    type: object
+                required:
+                - name
+                type: object
+              providerRef:
+                description: 'ProviderReference specifies the provider that will be
+                  used to create, observe, update, and delete this managed resource.
+                  Deprecated: Please use ProviderConfigReference, i.e. `providerConfigRef`'
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                  policy:
+                    description: Policies for referencing.
+                    properties:
+                      resolution:
+                        default: Required
+                        description: Resolution specifies whether resolution of this
+                          reference is required. The default is 'Required', which
+                          means the reconcile will fail if the reference cannot be
+                          resolved. 'Optional' means this reference will be a no-op
+                          if it cannot be resolved.
+                        enum:
+                        - Required
+                        - Optional
+                        type: string
+                      resolve:
+                        description: Resolve specifies when this reference should
+                          be resolved. The default is 'IfNotPresent', which will attempt
+                          to resolve the reference only when the corresponding field
+                          is not present. Use 'Always' to resolve the reference on
+                          every reconcile.
+                        enum:
+                        - Always
+                        - IfNotPresent
+                        type: string
+                    type: object
+                required:
+                - name
+                type: object
+              publishConnectionDetailsTo:
+                description: PublishConnectionDetailsTo specifies the connection secret
+                  config which contains a name, metadata and a reference to secret
+                  store config to which any connection details for this managed resource
+                  should be written. Connection details frequently include the endpoint,
+                  username, and password required to connect to the managed resource.
+                properties:
+                  configRef:
+                    default:
+                      name: default
+                    description: SecretStoreConfigRef specifies which secret store
+                      config should be used for this ConnectionSecret.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: Resolution specifies whether resolution of
+                              this reference is required. The default is 'Required',
+                              which means the reconcile will fail if the reference
+                              cannot be resolved. 'Optional' means this reference
+                              will be a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: Resolve specifies when this reference should
+                              be resolved. The default is 'IfNotPresent', which will
+                              attempt to resolve the reference only when the corresponding
+                              field is not present. Use 'Always' to resolve the reference
+                              on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  metadata:
+                    description: Metadata is the metadata for connection secret.
+                    properties:
+                      annotations:
+                        additionalProperties:
+                          type: string
+                        description: Annotations are the annotations to be added to
+                          connection secret. - For Kubernetes secrets, this will be
+                          used as "metadata.annotations". - It is up to Secret Store
+                          implementation for others store types.
+                        type: object
+                      labels:
+                        additionalProperties:
+                          type: string
+                        description: Labels are the labels/tags to be added to connection
+                          secret. - For Kubernetes secrets, this will be used as "metadata.labels".
+                          - It is up to Secret Store implementation for others store
+                          types.
+                        type: object
+                      type:
+                        description: Type is the SecretType for the connection secret.
+                          - Only valid for Kubernetes Secret Stores.
+                        type: string
+                    type: object
+                  name:
+                    description: Name is the name of the connection secret.
+                    type: string
+                required:
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: WriteConnectionSecretToReference specifies the namespace
+                  and name of a Secret to which any connection details for this managed
+                  resource should be written. Connection details frequently include
+                  the endpoint, username, and password required to connect to the
+                  managed resource. This field is planned to be replaced in a future
+                  release in favor of PublishConnectionDetailsTo. Currently, both
+                  could be set independently and connection details would be published
+                  to both without affecting each other.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                  namespace:
+                    description: Namespace of the secret.
+                    type: string
+                required:
+                - name
+                - namespace
+                type: object
+            required:
+            - forProvider
+            type: object
+          status:
+            description: ProfileStatus defines the observed state of Profile.
+            properties:
+              atProvider:
+                properties:
+                  filters:
+                    description: The list of event filters.  For all filters that
+                      are *negated* inside of these event filters, that is all `Predefined`
+                      as well as `Custom` (Title and/or Description) ones the AND
+                      logic applies. For all *non-negated* ones the OR logic applies.
+                      Between these two groups, negated and non-negated, the AND logic
+                      applies.  If you specify both severity rule and event filter,
+                      the AND logic applies
+                    items:
+                      properties:
+                        filter:
+                          description: A conditions for the metric usage
+                          items:
+                            properties:
+                              custom:
+                                description: Configuration of a custom event filter.
+                                  Filters custom events by title or description. If
+                                  both specified, the AND logic applies
+                                items:
+                                  properties:
+                                    description:
+                                      description: Configuration of a matching filter
+                                      items:
+                                        properties:
+                                          caseSensitive:
+                                            description: The condition is case sensitive
+                                              (`false`) or case insensitive (`true`).   If
+                                              not set, then `false` is used, making
+                                              the condition case sensitive
+                                            type: boolean
+                                          enabled:
+                                            description: The filter is enabled (`true`)
+                                              or disabled (`false`)
+                                            type: boolean
+                                          negate:
+                                            description: Reverses the comparison **operator**.
+                                              For example it turns the **begins with**
+                                              into **does not begin with**
+                                            type: boolean
+                                          operator:
+                                            description: Operator of the comparison.   You
+                                              can reverse it by setting **negate**
+                                              to `true`. Possible values are `BEGINS_WITH`,
+                                              `CONTAINS`, `CONTAINS_REGEX`, `ENDS_WITH`
+                                              and `EQUALS`
+                                            type: string
+                                          value:
+                                            description: The value to compare to
+                                            type: string
+                                        type: object
+                                      type: array
+                                    metadata:
+                                      description: Configuration of a matching filter
+                                      items:
+                                        properties:
+                                          items:
+                                            description: Define filters for event
+                                              properties. A maximum of 20 properties
+                                              is allowed.
+                                            items:
+                                              properties:
+                                                filter:
+                                                  items:
+                                                    properties:
+                                                      key:
+                                                        description: GET /api/v2/eventProperties
+                                                          for list of available keys
+                                                        type: string
+                                                      value:
+                                                        description: Value
+                                                        type: string
+                                                    type: object
+                                                  type: array
+                                              type: object
+                                            type: array
+                                        type: object
+                                      type: array
+                                    title:
+                                      description: Configuration of a matching filter
+                                      items:
+                                        properties:
+                                          caseSensitive:
+                                            description: The condition is case sensitive
+                                              (`false`) or case insensitive (`true`).   If
+                                              not set, then `false` is used, making
+                                              the condition case sensitive
+                                            type: boolean
+                                          enabled:
+                                            description: The filter is enabled (`true`)
+                                              or disabled (`false`)
+                                            type: boolean
+                                          negate:
+                                            description: Reverses the comparison **operator**.
+                                              For example it turns the **begins with**
+                                              into **does not begin with**
+                                            type: boolean
+                                          operator:
+                                            description: Operator of the comparison.   You
+                                              can reverse it by setting **negate**
+                                              to `true`. Possible values are `BEGINS_WITH`,
+                                              `CONTAINS`, `CONTAINS_REGEX`, `ENDS_WITH`
+                                              and `EQUALS`
+                                            type: string
+                                          value:
+                                            description: The value to compare to
+                                            type: string
+                                        type: object
+                                      type: array
+                                  type: object
+                                type: array
+                              predefined:
+                                description: Configuration of a custom event filter.
+                                  Filters custom events by title or description. If
+                                  both specified, the AND logic applies
+                                items:
+                                  properties:
+                                    negate:
+                                      description: 'The alert triggers when the problem
+                                        of specified severity arises while the specified
+                                        event **is** happening (`false`) or while
+                                        the specified event is **not** happening (`true`).   For
+                                        example, if you chose the Slowdown (`PERFORMANCE`)
+                                        severity and Unexpected high traffic (`APPLICATION_UNEXPECTED_HIGH_LOAD`)
+                                        event with **negate** set to `true`, the alerting
+                                        profile will trigger only when the slowdown
+                                        problem is raised while there is no unexpected
+                                        high traffic event.  Consider the following
+                                        use case as an example. The Slowdown (`PERFORMANCE`)
+                                        severity rule is set. Depending on the configuration
+                                        of the event filter (Unexpected high traffic
+                                        (`APPLICATION_UNEXPECTED_HIGH_LOAD`) event
+                                        is used as an example), the options of the
+                                        alerting profile is one of the following:*
+                                        **negate** is set to `false`: The alert triggers
+                                        when the slowdown problem is raised while
+                                        unexpected high traffic event is happening.  *
+                                        **negate** is set to `true`: The alert triggers
+                                        when the slowdown problem is raised while
+                                        there is no unexpected high traffic event.  *
+                                        no event rule is set: The alert triggers when
+                                        the slowdown problem is raised, regardless
+                                        of any events'
+                                      type: boolean
+                                    type:
+                                      description: The type of the predefined event.
+                                        Possible values are `APPLICATION_ERROR_RATE_INCREASED`,
+                                        `APPLICATION_SLOWDOWN`, `APPLICATION_UNEXPECTED_HIGH_LOAD`,
+                                        `APPLICATION_UNEXPECTED_LOW_LOAD`, `AWS_LAMBDA_HIGH_ERROR_RATE`,
+                                        `CUSTOM_APPLICATION_ERROR_RATE_INCREASED`,
+                                        `CUSTOM_APPLICATION_SLOWDOWN`, `CUSTOM_APPLICATION_UNEXPECTED_HIGH_LOAD`,
+                                        `CUSTOM_APPLICATION_UNEXPECTED_LOW_LOAD`,
+                                        `CUSTOM_APP_CRASH_RATE_INCREASED`, `DATABASE_CONNECTION_FAILURE`,
+                                        `DATA_CENTER_SERVICE_PERFORMANCE_DEGRADATION`,
+                                        `DATA_CENTER_SERVICE_UNAVAILABLE`, `EBS_VOLUME_HIGH_LATENCY`,
+                                        `EC2_HIGH_CPU`, `ELB_HIGH_BACKEND_ERROR_RATE`,
+                                        `ENTERPRICE_APPLICATION_PERFORMANCE_DEGRADATION`,
+                                        `ENTERPRISE_APPLICATION_UNAVAILABLE`, `ESXI_GUEST_ACTIVE_SWAP_WAIT`,
+                                        `ESXI_GUEST_CPU_LIMIT_REACHED`, `ESXI_HOST_CPU_SATURATION`,
+                                        `ESXI_HOST_DATASTORE_LOW_DISK_SPACE`, `ESXI_HOST_DISK_QUEUE_SLOW`,
+                                        `ESXI_HOST_DISK_SLOW`, `ESXI_HOST_MEMORY_SATURATION`,
+                                        `ESXI_HOST_NETWORK_PROBLEMS`, `ESXI_HOST_OVERLOADED_STORAGE`,
+                                        `ESXI_VM_IMPACT_HOST_CPU_SATURATION`, `ESXI_VM_IMPACT_HOST_MEMORY_SATURATION`,
+                                        `EXTERNAL_SYNTHETIC_TEST_OUTAGE`, `EXTERNAL_SYNTHETIC_TEST_SLOWDOWN`,
+                                        `HOST_OF_SERVICE_UNAVAILABLE`, `HTTP_CHECK_GLOBAL_OUTAGE`,
+                                        `HTTP_CHECK_LOCAL_OUTAGE`, `HTTP_CHECK_TEST_LOCATION_SLOWDOWN`,
+                                        `MOBILE_APPLICATION_ERROR_RATE_INCREASED`,
+                                        `MOBILE_APPLICATION_SLOWDOWN`, `MOBILE_APPLICATION_UNEXPECTED_HIGH_LOAD`,
+                                        `MOBILE_APPLICATION_UNEXPECTED_LOW_LOAD`,
+                                        `MOBILE_APP_CRASH_RATE_INCREASED`, `MONITORING_UNAVAILABLE`,
+                                        `OSI_DISK_LOW_INODES`, `OSI_GRACEFULLY_SHUTDOWN`,
+                                        `OSI_HIGH_CPU`, `OSI_HIGH_MEMORY`, `OSI_LOW_DISK_SPACE`,
+                                        `OSI_NIC_DROPPED_PACKETS_HIGH`, `OSI_NIC_ERRORS_HIGH`,
+                                        `OSI_NIC_UTILIZATION_HIGH`, `OSI_SLOW_DISK`,
+                                        `OSI_UNEXPECTEDLY_UNAVAILABLE`, `PGI_OF_SERVICE_UNAVAILABLE`,
+                                        `PGI_UNAVAILABLE`, `PG_LOW_INSTANCE_COUNT`,
+                                        `PROCESS_CRASHED`, `PROCESS_HIGH_GC_ACTIVITY`,
+                                        `PROCESS_MEMORY_RESOURCE_EXHAUSTED`, `PROCESS_NA_HIGH_CONN_FAIL_RATE`,
+                                        `PROCESS_NA_HIGH_LOSS_RATE`, `PROCESS_THREADS_RESOURCE_EXHAUSTED`,
+                                        `RDS_HIGH_CPU`, `RDS_HIGH_LATENCY`, `RDS_LOW_MEMORY`,
+                                        `RDS_LOW_STORAGE_SPACE`, `RDS_OF_SERVICE_UNAVAILABLE`,
+                                        `RDS_RESTART_SEQUENCE`, `SERVICE_ERROR_RATE_INCREASED`,
+                                        `SERVICE_SLOWDOWN`, `SERVICE_UNEXPECTED_HIGH_LOAD`,
+                                        `SERVICE_UNEXPECTED_LOW_LOAD`, `SYNTHETIC_GLOBAL_OUTAGE`,
+                                        `SYNTHETIC_LOCAL_OUTAGE`, `SYNTHETIC_NODE_OUTAGE`,
+                                        `SYNTHETIC_PRIVATE_LOCATION_OUTAGE` and `SYNTHETIC_TEST_LOCATION_SLOWDOWN`
+                                      type: string
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  id:
+                    type: string
+                  legacyId:
+                    description: The ID of this setting when referred to by the Config
+                      REST API V1
+                    type: string
+                  managementZone:
+                    description: The ID of the management zone to which the alerting
+                      profile applies
+                    type: string
+                  rules:
+                    description: A list of rules for management zone usage.  Each
+                      rule is evaluated independently of all other rules
+                    items:
+                      properties:
+                        rule:
+                          description: A conditions for the metric usage
+                          items:
+                            properties:
+                              delayInMinutes:
+                                description: Send a notification if a problem remains
+                                  open longer than *X* minutes
+                                type: number
+                              includeMode:
+                                description: 'The filtering mode:  * `INCLUDE_ANY`:
+                                  The rule applies to monitored entities that have
+                                  at least one of the specified tags. You can specify
+                                  up to 100 tags.  * `INCLUDE_ALL`: The rule applies
+                                  to monitored entities that have **all** of the specified
+                                  tags. You can specify up to 10 tags.  * `NONE`:
+                                  The rule applies to all monitored entities'
+                                type: string
+                              severityLevel:
+                                description: "The severity level to trigger the alert.
+                                  Possible values are `AVAILABILITY`,\t`CUSTOM_ALERT`,\t`ERRORS`,`MONITORING_UNAVAILABLE`,`PERFORMANCE`
+                                  and `RESOURCE_CONTENTION`."
+                                type: string
+                              tags:
+                                description: A set of tags you want to filter by.
+                                  You can also specify a tag value alongside the tag
+                                  name using the syntax `name:value`.
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: LastTransitionTime is the last time this condition
+                        transitioned from one status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A Message containing details about this condition's
+                        last transition from one status to another, if any.
+                      type: string
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: Type of this condition. At most one of each condition
+                        type may apply to a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
